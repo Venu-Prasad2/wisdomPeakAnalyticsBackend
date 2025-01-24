@@ -5,9 +5,9 @@ const path = require("path");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
-const cors = require("cors"); // Import the cors package
+const cors = require("cors"); 
 
-dotenv.config(); // Load environment variables from .env file
+dotenv.config();
 
 const dbPath = path.join(__dirname, "customer.db");
 const app = express();
@@ -54,7 +54,7 @@ app.post("/register", async (request, response) => {
 
     // Check if the user already exists using parameterized query
     const selectUserQuery = `SELECT * FROM users1 WHERE email = ?`;
-    const dbUser = await db.get(selectUserQuery, [email]);  // Properly escape and parameterize email
+    const dbUser = await db.get(selectUserQuery, [email]);  
 
     if (dbUser === undefined) {
       // Insert new user using parameterized query
@@ -62,7 +62,7 @@ app.post("/register", async (request, response) => {
         INSERT INTO users1 (name, email, password) 
         VALUES (?, ?, ?)
       `;
-      await db.run(createUserQuery, [name, email, hashedPassword]);  // Properly escape and parameterize name, email, and password
+      await db.run(createUserQuery, [name, email, hashedPassword]);  
 
       // Create JWT token
       const payload = { email, name };
@@ -125,7 +125,7 @@ const authenticateJWT = (request, response, next) => {
 };
 
 app.get("/protected-route", authenticateJWT, (request, response) => {
-  response.send(`Hello, ${request.user.username}. You are authenticated!`);
+  response.send(`Hello, You are authenticated!`);
 });
 
 // Get all users
