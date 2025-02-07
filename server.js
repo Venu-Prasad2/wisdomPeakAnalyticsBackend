@@ -11,7 +11,7 @@ dotenv.config();
 
 const dbPath = path.join(__dirname, "customer.db");
 const app = express();
-app.use(cors()); // Use the cors middleware
+app.use(cors()); 
 app.use(express.json());
 
 let db = null;
@@ -39,7 +39,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
 app.post("/register", async (request, response) => {
   const { name, email, password } = request.body;
 
-  // Validate required fields
+  
   if (!name || !email || !password) {
     return response.status(400).send("Missing required fields: name, email, or password");
   }
@@ -49,22 +49,22 @@ app.post("/register", async (request, response) => {
   }
 
   try {
-    // Hash the password
+    
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Check if the user already exists using parameterized query
+    
     const selectUserQuery = `SELECT * FROM users1 WHERE email = ?`;
     const dbUser = await db.get(selectUserQuery, [email]);  
 
     if (dbUser === undefined) {
-      // Insert new user using parameterized query
+      
       const createUserQuery = `
         INSERT INTO users1 (name, email, password) 
         VALUES (?, ?, ?)
       `;
       await db.run(createUserQuery, [name, email, hashedPassword]);  
 
-      // Create JWT token
+      
       const payload = { email, name };
       const jwtToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
       response.send({ jwtToken });
